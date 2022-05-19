@@ -8,7 +8,7 @@ public class GameInputManager : MonoBehaviour
     private static GameInputManager instance;
     public static GameInputManager Instance => instance;
     private GameInputActions gameInput;
-    public Collider other;
+
     [SerializeField] private MouseLook mouseLook;
 
     public Vector2 mouseInput;

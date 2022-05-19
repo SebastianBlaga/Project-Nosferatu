@@ -5,25 +5,49 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    
     public NavMeshAgent agent;
     public Transform player;
     public Animator enemyAnimator;
     public CharacterController enemyController;
     public float attack_Distance = 3f;
+    public Transform[] points;
+    private int destPoint = 0;
 
     public float detectRadius = 10f;
-
-
     public float health = 100f;
-    
-    void Start()
+
+    public enum EnemyState
+    {
+        Patrol,
+        Chase,
+        Attack
+    }
+
+    private void Awake()
     {
         enemyAnimator = GetComponent<Animator>();
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+    }
+    void Start()
+    {
+        EnemyState state;
+        state = EnemyState.Patrol;
+        agent.autoBraking = false;
+        if (gameObject.CompareTag("PatrollingEnemy"))
+        {
+            StartPatrolling();
+        }
 
         // Vector3 playerPosition = player.transform.position * -3f;
         // agent.destination = player.position;
+    }
+
+    private void StartPatrolling()
+    {
+        agent.speed = 2f;
+        enemyAnimator.SetBool("isWalking", true);
     }
 
     // Update is called once per frame
@@ -32,8 +56,7 @@ public class Enemy : MonoBehaviour
         float distance = Vector3.Distance(player.position, transform.position);
         if (distance <= detectRadius)
         {
-            agent.SetDestination(player.position);
-            enemyAnimator.SetBool("isRunning", true);
+            StartChase();
         }
 
         if (distance <= attack_Distance)
@@ -45,10 +68,26 @@ public class Enemy : MonoBehaviour
             enemyAnimator.SetBool("isAttacking", false);
   
         }
-
-       // agent.velocity = enemyController.velocity;
+        if (agent.remainingDistance < 0.5f)
+            GoToNextPoints();
+        // agent.velocity = enemyController.velocity;
     }
-    
+
+    private void StartChase()
+    {
+        agent.speed = 4f;
+        agent.SetDestination(player.position);
+        enemyAnimator.SetBool("isRunning", true);
+    }
+
+    private void GoToNextPoints()
+    {
+        if (points.Length == 0)
+            return;
+        agent.destination = points[destPoint].position;
+        destPoint = (destPoint + 1) % points.Length;
+    }
+
     public void TakeDamage (float amount, bool effect)
     {
         health -= amount;
