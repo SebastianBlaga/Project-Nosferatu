@@ -1,0 +1,4 @@
+repository "Project-Nosferatu@VFX_Reel@cloud"
+  path "/"
+    br "/main"
+    co "/main"

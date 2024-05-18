@@ -44,7 +44,7 @@ public class GameInputManager : MonoBehaviour
         gameInput.Player.Interact.canceled += _ => PlayerManager.Instance.GetPlayerMovement().InteractionCanceled();
         gameInput.Player.SelectWeaponScroll.performed += context => WeaponManager.Instance.SelectWeapon(context);
 
-        gameInput.Player.Fire.performed += _ => Weapons.Instance.Shoot();
+        gameInput.Player.Fire.performed += _ => WeaponManager.Instance.Attack();
 
     }
 

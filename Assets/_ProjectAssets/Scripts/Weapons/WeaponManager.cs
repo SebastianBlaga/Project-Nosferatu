@@ -9,7 +9,8 @@ public class WeaponManager : MonoBehaviour
     public static WeaponManager Instance => instance;
 
     private Vector2 input;
-    private int selectedWeapon = 0;
+    public int selectedWeapon = 0;
+
 
     private void Awake()
     {
@@ -25,13 +26,13 @@ public class WeaponManager : MonoBehaviour
 
     private void Start()
     {
-        SelectWeapon();
+        ChooseWeapon();
     }
     public void SelectWeapon(InputAction.CallbackContext context)
     {
         input = context.ReadValue<Vector2>();
-        Debug.Log(input);
-        
+
+
         int previousSelectedWeapon = selectedWeapon;
         if (input.y > 0)
         {
@@ -58,10 +59,10 @@ public class WeaponManager : MonoBehaviour
         }
         if (previousSelectedWeapon != selectedWeapon)
         {
-            SelectWeapon();
+            ChooseWeapon();
         }
     }
-    void SelectWeapon()
+    void ChooseWeapon()
     {
         int i = 0;
         foreach (Transform weapon in transform)
@@ -71,6 +72,39 @@ public class WeaponManager : MonoBehaviour
             else
                 weapon.gameObject.SetActive(false);
             i++;
+        }
+    }
+
+    public void Attack()
+    {
+        switch (selectedWeapon)
+        {
+            case 0:
+                Fists.instance.Attack();
+                break;
+            case 1:
+                Sword.instance.Attack();
+                break;
+            case 2:
+                Revolver.instance.Attack();
+                break;
+            case 4:
+                //NYI
+                break;
+            case 5:
+                //NYI
+                break;
+            case 6:
+                //NYI
+                break;
+            case 7:
+                //NYI
+                break;
+            case 8:
+                //NYI
+                break;
+            default:
+                break;
         }
     }
 }

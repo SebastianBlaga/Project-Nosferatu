@@ -3,37 +3,53 @@ using UnityEngine;
 
 public class Revolver : MonoBehaviour
 {
-    public float damage = 30f;
-    public float range = 100f;
-    public bool effect = false;
+    public WeaponData weapon;
+    public float damage;
+    public float range;
 
-    public Camera fpsCam;
-    public ParticleSystem muzzle;
+    public RaycastHit raycastHit;
+    public LayerMask enemyLayer;
+    public Camera fpsCamera;
+    public float hit;
+    public static Revolver instance;
+    public ParticleSystem muzzleflash;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        if(Input.GetButtonDown("Fire1"))
+        if (instance == null)
         {
-            Shoot();
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+    private void Start()
+    {
+        damage = weapon.damage;
+        range = weapon.range;
+    }
+
+    public void Attack()
+    {
+        muzzleflash.Play();
+        RaycastHit hit;
+        if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range))
+        {
+            Debug.Log(hit.transform);
+
+            Enemy target = hit.transform.GetComponent<Enemy>();
+            if (target != null)
+            {
+                target.TakeDamage(damage, false);
+            }
         }
     }
 
-    void Shoot()
+    void OnDrawGizmosSelected()
     {
-        muzzle.Play();
-        RaycastHit hit;
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
-        {
-            Debug.Log(hit.transform.name);
-
-            Enemy enemy = hit.transform.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(damage, effect);
-            }
-        }
-
-
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, range);
     }
 }

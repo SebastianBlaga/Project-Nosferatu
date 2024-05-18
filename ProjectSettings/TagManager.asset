@@ -6,6 +6,9 @@ TagManager:
   tags:
   - SafeZone
   - PatrollingEnemy
+  - Door
+  - Family
+  - Destination
   layers:
   - Default
   - TransparentFX

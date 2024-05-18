@@ -32,6 +32,7 @@ public class Enemy : MonoBehaviour
     }
     void Start()
     {
+        agent.stoppingDistance = 0f;
         EnemyState state;
         state = EnemyState.Patrol;
         agent.autoBraking = false;
@@ -76,6 +77,7 @@ public class Enemy : MonoBehaviour
     private void StartChase()
     {
         agent.speed = 4f;
+        agent.stoppingDistance = 3f;
         agent.SetDestination(player.position);
         enemyAnimator.SetBool("isRunning", true);
     }

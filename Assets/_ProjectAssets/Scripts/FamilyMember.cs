@@ -48,7 +48,7 @@ public class FamilyMember : MonoBehaviour
         }
         else if (isSafeZoonClose && isPlayerClose)
         {
-            agent.SetDestination(new Vector3(50.83f, 1, 108f));
+            agent.SetDestination(new Vector3(54.616f, 1, 129.159f));
 
         }
 
@@ -69,10 +69,10 @@ public class FamilyMember : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("SafeZone"))
+        if (other.CompareTag("Destination"))
         {
             isSafeZoonClose = true;
-            agentDestination = new Vector3(50.83f, 1, 108f);
+            agentDestination = new Vector3(54.616f, 1, 129.159f);
         }
     }
     void OnDrawGizmosSelected()

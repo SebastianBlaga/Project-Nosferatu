@@ -4,35 +4,51 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
-    public float damage = 20f;
-    public float range = 5f;
-    public bool effect = false;
+    public WeaponData weapon;
+    public float damage;
+    public float range;
 
-    public Camera fpsCam;
+    public RaycastHit raycastHit;
+    public LayerMask enemyLayer;
+    public Camera fpsCamera;
+    public float hit;
+    public static Sword instance;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (instance == null)
         {
-            Attack();
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
         }
     }
-
-    void Attack()
+    private void Start()
     {
+        damage = weapon.damage;
+        range = weapon.range;
+    }
 
+    public void Attack()
+    {
         RaycastHit hit;
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
+        if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range))
         {
-            Debug.Log(hit.transform.name);
+            Debug.Log(hit.transform);
 
-            Enemy enemy = hit.transform.GetComponent<Enemy>();
-            if (enemy != null)
+            Enemy target = hit.transform.GetComponent<Enemy>();
+            if (target != null)
             {
-                enemy.TakeDamage(damage, effect);
+                target.TakeDamage(damage, false);
             }
         }
-
     }
- }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, range);
+    }
+}

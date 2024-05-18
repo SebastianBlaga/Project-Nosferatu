@@ -26,7 +26,7 @@ public class Weapons : MonoBehaviour
     {
         SingletonlInitialization();
     }
-    public void Shoot()
+    public void playerAttack()
     {
         muzzleflash.Play();
         RaycastHit hit;
@@ -40,7 +40,6 @@ public class Weapons : MonoBehaviour
                 target.TakeDamage(damage, false);
             }
         }
-        
     }
 
     private void SingletonlInitialization()

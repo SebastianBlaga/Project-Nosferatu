@@ -4,36 +4,41 @@ using UnityEngine;
 
 public class Cross : MonoBehaviour
 {
-    public float damage = 5f;
-    public float range = 30f;
-    public bool effect = false;
+    public WeaponData weapon;
+    public float damage;
+    public float range;
 
-    public Camera fpsCam;
+    public RaycastHit raycastHit;
+    public LayerMask enemyLayer;
+    public Camera fpsCamera;
+    public float hit;
+    public static Cross instance;
 
-    // Update is called once per frame
-    void Update()
+
+    private void Start()
     {
-        if (Input.GetButtonDown("Fire1"))
+        damage = weapon.damage;
+        range = weapon.range;
+    }
+
+    public void Attack()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range))
         {
-            Attack();
+            Debug.Log(hit.transform);
+
+            Enemy target = hit.transform.GetComponent<Enemy>();
+            if (target != null)
+            {
+                target.TakeDamage(damage, false);
+            }
         }
     }
 
-    void Attack()
+    void OnDrawGizmosSelected()
     {
-
-        RaycastHit hit;
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
-        {
-            Debug.Log(hit.transform.name);
-            effect = true;
-            Enemy enemy = hit.transform.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(damage, effect);
-                effect = false;
-            }
-        }
-
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, range);
     }
 }

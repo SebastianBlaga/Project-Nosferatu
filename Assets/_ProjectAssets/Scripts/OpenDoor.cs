@@ -7,6 +7,8 @@ public class OpenDoor : MonoBehaviour
 {
     private bool action;
     private bool openedDoor = false;
+    public Animator animator;
+    public Animation animation;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -29,7 +31,7 @@ public class OpenDoor : MonoBehaviour
         {
             if (action)
             {
-                gameObject.GetComponent<Animator>().Play("DoorAnimation");
+                animator.Play("DoorAnimation");
                 openedDoor = true;
                 action = false;
             }
@@ -44,7 +46,7 @@ public class OpenDoor : MonoBehaviour
     IEnumerator closeDoor()
     {
         yield return new WaitForSeconds(5);
-        gameObject.GetComponent<Animator>().Play("CloseDoor");
+        animator.Play("CloseDoor");
         openedDoor = false;
     }
 }
